@@ -8,28 +8,22 @@ using System.Xml.XPath;
 
 namespace EngineCenso
 {
-    internal abstract class CensoParser
+    internal class CensoParser
     {
-        protected abstract string xPathCidades { get; }
-        protected abstract string xPathCidadeNome { get; }
-        protected abstract string xPathCidadeHabitantes { get; }
-        protected abstract string xPathCidadeBairros { get; }
-        protected abstract string xPathBairroNome { get; }
-        protected abstract string xPathBairroHabitantes { get; }
-
-
         private XDocument document;
+        private CensoMapper mapper;
 
-        public CensoParser(string input)
+        internal CensoParser(string input, CensoMapper mapper)
         {
             document = XDocument.Parse(input);
+            this.mapper = mapper;
         }
 
         internal protected string Process()
         {
             var output = new CensoOutput
             {
-                Result = ParseCidades(document.XPathSelectElements(xPathCidades))
+                Result = ParseCidades(document.XPathSelectElements(mapper.CidadesPath))
             };
 
             var resolver = new CamelCasePropertyNamesContractResolver();
@@ -48,9 +42,9 @@ namespace EngineCenso
         {
             return new Result()
             {
-                Cidade = cidadeElement.XPathSelectElement(xPathCidadeNome).Value,
-                Habitantes = int.Parse(cidadeElement.XPathSelectElement(xPathCidadeHabitantes).Value),
-                Bairros = ParseBairros(cidadeElement.XPathSelectElements(xPathCidadeBairros))
+                Cidade = cidadeElement.XPathSelectElement(mapper.NomeCidadePath).Value,
+                Habitantes = int.Parse(cidadeElement.XPathSelectElement(mapper.HabitantesCidadePath).Value),
+                Bairros = ParseBairros(cidadeElement.XPathSelectElements(mapper.BairrosPath))
             };
         }
 
@@ -66,8 +60,8 @@ namespace EngineCenso
         {
             return new Bairro()
             {
-                Nome = bairroElement.XPathSelectElement(xPathBairroNome).Value,
-                Habitantes = int.Parse(bairroElement.XPathSelectElement(xPathBairroHabitantes).Value)
+                Nome = bairroElement.XPathSelectElement(mapper.NomeBairroPath).Value,
+                Habitantes = int.Parse(bairroElement.XPathSelectElement(mapper.HabitantesBairroPath).Value)
             };
         }
     }

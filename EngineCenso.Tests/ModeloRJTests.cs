@@ -9,6 +9,8 @@ namespace EngineCenso.Tests
     [TestFixture]
     public class ModeloRJTests
     {
+        public CensoMapper rjMapper = new CensoMapper("/corpo/cidade", "nome", "populacao", "bairros/bairro", "nome", "populacao");
+
         [TestCase]
         public void InputNoModeloRJ_ComUmaCidadeEUmBairro_RetornaStringNoPadraoDefinido()
         {
@@ -43,7 +45,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { rjMapper });
             var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
@@ -96,7 +98,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { rjMapper });
             var actualOutput = engine.Process();
 
             string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
@@ -160,7 +162,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { rjMapper });
             var actualOutput = engine.Process();
 
             string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
@@ -242,7 +244,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { rjMapper });
             var actualOutput = engine.Process();
 
             string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");

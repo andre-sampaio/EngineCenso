@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace EngineCenso.Tests
@@ -6,6 +7,8 @@ namespace EngineCenso.Tests
     [TestFixture]
     public class ModeloMGTests
     {
+        public CensoMapper mgMapper = new CensoMapper("/body/region/cities/city", "name", "population", "neighborhoods/neighborhood", "name", "population");
+
         [TestCase]
         public void InputNoModeloMG_ComUmaRegiaoComUmaCidadeEUmBairro_RetornaStringNoPadraoDefinido()
         {
@@ -45,7 +48,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
             var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
@@ -103,7 +106,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
             var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
@@ -173,7 +176,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
             var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
@@ -261,7 +264,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
             var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
@@ -336,7 +339,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
             var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
@@ -429,7 +432,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
             var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
@@ -546,7 +549,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
             var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
@@ -699,7 +702,7 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso(input);
+            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
             var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
