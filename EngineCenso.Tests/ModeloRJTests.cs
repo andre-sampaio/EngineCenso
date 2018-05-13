@@ -43,8 +43,8 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso();
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso(input);
+            var actualOutput = engine.Process();
 
             // Don't care for spaces, tabs and new lines
             string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
@@ -96,8 +96,8 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso();
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso(input);
+            var actualOutput = engine.Process();
 
             string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
             string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
@@ -160,8 +160,8 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso();
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso(input);
+            var actualOutput = engine.Process();
 
             string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
             string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
@@ -242,8 +242,8 @@ namespace EngineCenso.Tests
     ]
 }";
 
-            EngineCenso engine = new EngineCenso();
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso(input);
+            var actualOutput = engine.Process();
 
             string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
             string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
