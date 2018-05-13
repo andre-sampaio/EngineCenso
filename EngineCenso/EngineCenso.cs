@@ -14,16 +14,16 @@ namespace EngineCenso
         public EngineCenso(string input)
         {
             if (input.StartsWith("<corpo>"))
-                parser = new CensoRJParser();
+                parser = new CensoRJParser(input);
             else
-                parser = new CensoMGParser();
+                parser = new CensoMGParser(input);
 
             this.input = input;
         }
 
         public string Process()
         {
-            return parser.Process(input);
+            return parser.Process();
         }
     }
 }
