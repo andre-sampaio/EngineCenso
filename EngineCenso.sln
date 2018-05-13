@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineCenso", "EngineCenso\EngineCenso.csproj", "{91525028-57C2-4EA7-897A-333CDBD18758}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EngineCenso", "EngineCenso\EngineCenso.csproj", "{91525028-57C2-4EA7-897A-333CDBD18758}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{36E156D7-9F3A-4BD8-9621-D416F97F1BCD}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineCenso.Tests", "EngineCenso.Tests\EngineCenso.Tests.csproj", "{7AAD2052-1150-4903-83A6-6CD051E7DE8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +22,10 @@ Global
 		{91525028-57C2-4EA7-897A-333CDBD18758}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91525028-57C2-4EA7-897A-333CDBD18758}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91525028-57C2-4EA7-897A-333CDBD18758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AAD2052-1150-4903-83A6-6CD051E7DE8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AAD2052-1150-4903-83A6-6CD051E7DE8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AAD2052-1150-4903-83A6-6CD051E7DE8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AAD2052-1150-4903-83A6-6CD051E7DE8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
