@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE.txt = LICENSE.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineCenso.Tests", "EngineCenso.Tests\EngineCenso.Tests.csproj", "{7AAD2052-1150-4903-83A6-6CD051E7DE8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EngineCenso.Tests", "EngineCenso.Tests\EngineCenso.Tests.csproj", "{7AAD2052-1150-4903-83A6-6CD051E7DE8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

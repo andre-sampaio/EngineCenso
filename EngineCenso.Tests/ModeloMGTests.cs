@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -7,7 +8,7 @@ namespace EngineCenso.Tests
     [TestFixture]
     public class ModeloMGTests
     {
-        public CensoMapper mgMapper = new CensoMapper("/body/region/cities/city", "name", "population", "neighborhoods/neighborhood", "name", "population");
+        public static CensoMapping mgMapper = new CensoMapping("/body/region/cities/city", "name", "population", "neighborhoods/neighborhood", "name", "population");
 
         [TestCase]
         public void InputNoModeloMG_ComUmaRegiaoComUmaCidadeEUmBairro_RetornaStringNoPadraoDefinido()
@@ -32,30 +33,30 @@ namespace EngineCenso.Tests
     </region>
 </body>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Uberlandia"",
-            ""habitantes"":700001,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Santa Monica"",
-                    ""habitantes"":13012
+                    new Result()
+                    {
+                        Cidade = "Uberlandia",
+                        Habitantes = 700001,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Santa Monica",
+                                Habitantes = 13012
+                            }
+                        }
+                    }
                 }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            // Don't care for spaces, tabs and new lines
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -86,34 +87,35 @@ namespace EngineCenso.Tests
     </region>
 </body>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Uberlandia"",
-            ""habitantes"":700001,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Santa Monica"",
-                    ""habitantes"":13012
-                },
-                {
-                    ""nome"":""Fundinho"",
-                    ""habitantes"":19864
+                    new Result()
+                    {
+                        Cidade = "Uberlandia",
+                        Habitantes = 700001,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Santa Monica",
+                                Habitantes = 13012
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Fundinho",
+                                Habitantes = 19864
+                            }
+                        }
+                    }
                 }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            // Don't care for spaces, tabs and new lines
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -150,40 +152,43 @@ namespace EngineCenso.Tests
     </region>
 </body>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Uberlandia"",
-            ""habitantes"":700001,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Santa Monica"",
-                    ""habitantes"":13012
+                    new Result()
+                    {
+                        Cidade = "Uberlandia",
+                        Habitantes = 700001,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Santa Monica",
+                                Habitantes = 13012
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Uberaba",
+                        Habitantes = 300000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Manoel Mendes",
+                                Habitantes = 16543
+                            }
+                        }
+                    }
                 }
-            ]
-        },
-        {
-            ""cidade"":""Uberaba"",
-            ""habitantes"":300000,
-            ""bairros"":[
-                {
-                    ""nome"":""Manoel Mendes"",
-                    ""habitantes"":16543
-                }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            // Don't care for spaces, tabs and new lines
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -230,48 +235,53 @@ namespace EngineCenso.Tests
     </region>
 </body>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Uberlandia"",
-            ""habitantes"":700001,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Santa Monica"",
-                    ""habitantes"":13012
-                },
-                {
-                    ""nome"":""Fundinho"",
-                    ""habitantes"":19864
+                    new Result()
+                    {
+                        Cidade = "Uberlandia",
+                        Habitantes = 700001,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Santa Monica",
+                                Habitantes = 13012
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Fundinho",
+                                Habitantes = 19864
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Uberaba",
+                        Habitantes = 300000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Manoel Mendes",
+                                Habitantes = 16543
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Santa Maria",
+                                Habitantes = 16845
+                            }
+                        }
+                    }
                 }
-            ]
-        },
-        {
-            ""cidade"":""Uberaba"",
-            ""habitantes"":300000,
-            ""bairros"":[
-                {
-                    ""nome"":""Manoel Mendes"",
-                    ""habitantes"":16543
-                },
-                {
-                    ""nome"":""Santa Maria"",
-                    ""habitantes"":16845
-                }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            // Don't care for spaces, tabs and new lines
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -313,40 +323,43 @@ namespace EngineCenso.Tests
     </region>
 </body>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Uberlandia"",
-            ""habitantes"":700001,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Santa Monica"",
-                    ""habitantes"":13012
+                    new Result()
+                    {
+                        Cidade = "Uberlandia",
+                        Habitantes = 700001,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Santa Monica",
+                                Habitantes = 13012
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Juiz de Fora",
+                        Habitantes = 600000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Costa Carvalho",
+                                Habitantes = 80654
+                            }
+                        }
+                    }
                 }
-            ]
-        },
-        {
-            ""cidade"":""Juiz de Fora"",
-            ""habitantes"":600000,
-            ""bairros"":[
-                {
-                    ""nome"":""Costa Carvalho"",
-                    ""habitantes"":80654
-                }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            // Don't care for spaces, tabs and new lines
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -398,48 +411,53 @@ namespace EngineCenso.Tests
     </region>
 </body>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Uberlandia"",
-            ""habitantes"":700001,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Santa Monica"",
-                    ""habitantes"":13012
-                },
-                {
-                    ""nome"":""Fundinho"",
-                    ""habitantes"":19864
+                    new Result()
+                    {
+                        Cidade = "Uberlandia",
+                        Habitantes = 700001,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Santa Monica",
+                                Habitantes = 13012
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Fundinho",
+                                Habitantes = 19864
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Juiz de Fora",
+                        Habitantes = 600000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Costa Carvalho",
+                                Habitantes = 80654
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Grajaú",
+                                Habitantes = 25006
+                            }
+                        }
+                    }
                 }
-            ]
-        },
-        {
-            ""cidade"":""Juiz de Fora"",
-            ""habitantes"":600000,
-            ""bairros"":[
-                {
-                    ""nome"":""Costa Carvalho"",
-                    ""habitantes"":80654
-                },
-                {
-                    ""nome"":""Grajaú"",
-                    ""habitantes"":25006
-                }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            // Don't care for spaces, tabs and new lines
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -503,60 +521,69 @@ namespace EngineCenso.Tests
     </region>
 </body>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Uberlandia"",
-            ""habitantes"":700001,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Santa Monica"",
-                    ""habitantes"":13012
+                    new Result()
+                    {
+                        Cidade = "Uberlandia",
+                        Habitantes = 700001,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Santa Monica",
+                                Habitantes = 13012
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Uberaba",
+                        Habitantes = 300000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Manoel Mendes",
+                                Habitantes = 16543
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Juiz de Fora",
+                        Habitantes = 600000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Costa Carvalho",
+                                Habitantes = 80654
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Bicas",
+                        Habitantes = 14000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Alhadas",
+                                Habitantes = 2300
+                            }
+                        }
+                    }
                 }
-            ]
-        },
-        {
-            ""cidade"":""Uberaba"",
-            ""habitantes"":300000,
-            ""bairros"":[
-                {
-                    ""nome"":""Manoel Mendes"",
-                    ""habitantes"":16543
-                }
-            ]
-        },
-        {
-            ""cidade"":""Juiz de Fora"",
-            ""habitantes"":600000,
-            ""bairros"":[
-                {
-                    ""nome"":""Costa Carvalho"",
-                    ""habitantes"":80654
-                }
-            ]
-        },
-        {
-            ""cidade"":""Bicas"",
-            ""habitantes"":14000,
-            ""bairros"":[
-                {
-                    ""nome"":""Alhadas"",
-                    ""habitantes"":2300
-                }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            // Don't care for spaces, tabs and new lines
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -640,76 +667,89 @@ namespace EngineCenso.Tests
     </region>
 </body>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Uberlandia"",
-            ""habitantes"":700001,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Santa Monica"",
-                    ""habitantes"":13012
-                },
-                {
-                    ""nome"":""Fundinho"",
-                    ""habitantes"":19864
+                    new Result()
+                    {
+                        Cidade = "Uberlandia",
+                        Habitantes = 700001,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Santa Monica",
+                                Habitantes = 13012
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Fundinho",
+                                Habitantes = 19864
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Uberaba",
+                        Habitantes = 300000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Manoel Mendes",
+                                Habitantes = 16543
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Santa Maria",
+                                Habitantes = 16845
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Juiz de Fora",
+                        Habitantes = 600000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Costa Carvalho",
+                                Habitantes = 80654
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Grajaú",
+                                Habitantes = 25006
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Bicas",
+                        Habitantes = 14000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Alhadas",
+                                Habitantes = 2300
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Edgar Moreira",
+                                Habitantes = 3201
+                            }
+                        }
+                    }
                 }
-            ]
-        },
-        {
-            ""cidade"":""Uberaba"",
-            ""habitantes"":300000,
-            ""bairros"":[
-                {
-                    ""nome"":""Manoel Mendes"",
-                    ""habitantes"":16543
-                },
-                {
-                    ""nome"":""Santa Maria"",
-                    ""habitantes"":16845
-                }
-            ]
-        },
-        {
-            ""cidade"":""Juiz de Fora"",
-            ""habitantes"":600000,
-            ""bairros"":[
-                {
-                    ""nome"":""Costa Carvalho"",
-                    ""habitantes"":80654
-                },
-                {
-                    ""nome"":""Grajaú"",
-                    ""habitantes"":25006
-                }
-            ]
-        },
-        {
-            ""cidade"":""Bicas"",
-            ""habitantes"":14000,
-            ""bairros"":[
-                {
-                    ""nome"":""Alhadas"",
-                    ""habitantes"":2300
-                },
-                {
-                    ""nome"":""Edgar Moreira"",
-                    ""habitantes"":3201
-                }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { mgMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            // Don't care for spaces, tabs and new lines
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
     }
 }

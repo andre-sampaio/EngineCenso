@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace EngineCenso.Tests
     [TestFixture]
     public class ModeloRJTests
     {
-        public CensoMapper rjMapper = new CensoMapper("/corpo/cidade", "nome", "populacao", "bairros/bairro", "nome", "populacao");
+        public static CensoMapping rjMapper = new CensoMapping("/corpo/cidade", "nome", "populacao", "bairros/bairro", "nome", "populacao");
 
         [TestCase]
         public void InputNoModeloRJ_ComUmaCidadeEUmBairro_RetornaStringNoPadraoDefinido()
@@ -29,30 +30,30 @@ namespace EngineCenso.Tests
     </cidade>
 </corpo>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Rio de Janeiro"",
-            ""habitantes"":10345678,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Tijuca"",
-                    ""habitantes"":135678
+                    new Result()
+                    {
+                        Cidade = "Rio de Janeiro",
+                        Habitantes = 10345678,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Tijuca",
+                                Habitantes = 135678
+                            }
+                        }
+                    }
                 }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { rjMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            // Don't care for spaces, tabs and new lines
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -78,33 +79,35 @@ namespace EngineCenso.Tests
     </cidade>
 </corpo>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Rio de Janeiro"",
-            ""habitantes"":10345678,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Tijuca"",
-                    ""habitantes"":135678
-                },
-                {
-                    ""nome"":""Botafogo"",
-                    ""habitantes"":12456
+                    new Result()
+                    {
+                        Cidade = "Rio de Janeiro",
+                        Habitantes = 10345678,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Tijuca",
+                                Habitantes = 135678
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Botafogo",
+                                Habitantes = 12456
+                            }
+                        }
+                    }
                 }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { rjMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -136,39 +139,43 @@ namespace EngineCenso.Tests
     </cidade>
 </corpo>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Rio de Janeiro"",
-            ""habitantes"":10345678,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Tijuca"",
-                    ""habitantes"":135678
+                    new Result()
+                    {
+                        Cidade = "Rio de Janeiro",
+                        Habitantes = 10345678,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Tijuca",
+                                Habitantes = 135678
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Petrópolis",
+                        Habitantes = 300000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Mosela",
+                                Habitantes = 21234
+                            }
+                        }
+                    }
                 }
-            ]
-        },
-        {
-            ""cidade"":""Petrópolis"",
-            ""habitantes"":300000,
-            ""bairros"":[
-                {
-                    ""nome"":""Mosela"",
-                    ""habitantes"":21234
-                }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { rjMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
         [TestCase]
@@ -210,47 +217,53 @@ namespace EngineCenso.Tests
     </cidade>
 </corpo>";
 
-            const string expectedOutput =
-@"{
-""result"":[
-        {
-            ""cidade"":""Rio de Janeiro"",
-            ""habitantes"":10345678,
-            ""bairros"":[
+            CensoOutput expectedOutput = new CensoOutput()
+            {
+                Result = new List<Result>()
                 {
-                    ""nome"":""Tijuca"",
-                    ""habitantes"":135678
-                },
-                {
-                    ""nome"":""Botafogo"",
-                    ""habitantes"":12456
+                    new Result()
+                    {
+                        Cidade = "Rio de Janeiro",
+                        Habitantes = 10345678,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Tijuca",
+                                Habitantes = 135678
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Botafogo",
+                                Habitantes = 12456
+                            }
+                        }
+                    },
+                    new Result()
+                    {
+                        Cidade = "Petrópolis",
+                        Habitantes = 300000,
+                        Bairros = new List<Bairro>()
+                        {
+                            new Bairro ()
+                            {
+                                Nome = "Mosela",
+                                Habitantes = 21234
+                            },
+                            new Bairro ()
+                            {
+                                Nome = "Retiro",
+                                Habitantes = 51368
+                            }
+                        }
+                    }
                 }
-            ]
-        },
-        {
-            ""cidade"":""Petrópolis"",
-            ""habitantes"":300000,
-            ""bairros"":[
-                {
-                    ""nome"":""Mosela"",
-                    ""habitantes"":21234
-                },
-                {
-                    ""nome"":""Retiro"",
-                    ""habitantes"":51368
-                }
-            ]
-        }
-    ]
-}";
+            };
 
-            EngineCenso engine = new EngineCenso(input, new List<CensoMapper> { rjMapper });
-            var actualOutput = engine.Process();
+            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            var actualOutput = engine.Process(input);
 
-            string formatedExpectedOutput = Regex.Replace(expectedOutput, "\\s", "");
-            string formatedActualOutput = Regex.Replace(actualOutput, "\\s", "");
-
-            Assert.AreEqual(formatedExpectedOutput, formatedActualOutput);
+            Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using EngineCenso.Parser;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
@@ -9,26 +10,26 @@ namespace EngineCenso
 {
     public class EngineCenso
     {
-        private CensoParser parser;
-        private string input;
+        private IEnumerable<CensoMapping> mapperCandidates;
 
-        public EngineCenso(string input, IEnumerable<CensoMapper> mapperCandidates)
+        public EngineCenso(IEnumerable<CensoMapping> mapperCandidates)
         {
-            var viableMappers = mapperCandidates.Where(x => x.MatchesInput(input));
-
-            if (viableMappers.Count() > 1)
-                throw new Exception("Ambiguous input. More than one viable candidate.");
-            if (viableMappers.Count() < 1)
-                throw new Exception("No viable candidate found.");
-
-            parser = new CensoParser(input, viableMappers.First());
-
-            this.input = input;
+            this.mapperCandidates = mapperCandidates;
         }
 
-        public string Process()
+        public CensoOutput Process(string input)
         {
-            return parser.Process();
+            var parser = ParserFactory.BuildParserForInput(input);
+            var viableMappers = mapperCandidates.Where(x => x.CanBeParsedBy(parser)).ToList();
+
+            if (viableMappers.Count() > 1)
+                throw new Exception("Ambiguous call. More than one viable candidate");
+            if (viableMappers.Count() < 1)
+                throw new Exception("No viable parser");
+
+            var processer = new CensoProcesser(parser, viableMappers.First());
+
+            return processer.Process();
         }
     }
 }
