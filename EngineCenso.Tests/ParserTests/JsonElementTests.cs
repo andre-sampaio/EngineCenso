@@ -9,7 +9,7 @@ using System.Text;
 namespace EngineCenso.Tests.ParserTests
 {
     [TestFixture]
-    public class JsonElementParserTests
+    public class JsonElementTests
     {
         [TestCase]
         public void SelectElements_WithAValidPathCorrespondingToNoElements_ReturnsAnEmptySet()
@@ -125,6 +125,67 @@ namespace EngineCenso.Tests.ParserTests
             JsonElement element = new JsonElement(JToken.Parse(json));
 
             Assert.Throws<FormatException>(() => element.SelectInt(path));
+        }
+
+        [TestCase]
+        public void SelectInt_WithPathToNonExistentItem_ThrowsArgumentNullException()
+        {
+            string json =
+@"{
+    ""testElement"": ""sadsadsa""
+}";
+            string path = "$.nonExistent";
+
+            JsonElement element = new JsonElement(JToken.Parse(json));
+
+            Assert.Throws<ArgumentNullException>(() => element.SelectInt(path));
+        }
+
+        [TestCase]
+        public void SelectString_WithPathToString_ReturnsThatString()
+        {
+            string expected = "testString";
+            string json =
+@"{
+    ""testElement"": """ + expected + @"""
+}";
+            string path = "$.testElement";
+
+            JsonElement element = new JsonElement(JToken.Parse(json));
+
+            var actual = element.SelectString(path);
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [TestCase]
+        public void SelectString_WithPathToObject_ThrowsInvalidCastException()
+        {
+            string json =
+@"{
+    ""testElement"": {
+        ""test"": 123
+    }
+}";
+            string path = "$.testElement";
+
+            JsonElement element = new JsonElement(JToken.Parse(json));
+
+            Assert.Throws<InvalidCastException>(() => element.SelectString(path));
+        }
+
+        [TestCase]
+        public void SelectString_WithPathToNonExistentItem_ThrowsArgumentNullException()
+        {
+            string json =
+@"{
+    ""testElement"": ""sadsadsa""
+}";
+            string path = "$.nonExistent";
+
+            JsonElement element = new JsonElement(JToken.Parse(json));
+
+            Assert.Throws<ArgumentNullException>(() => element.SelectString(path));
         }
     }
 }
