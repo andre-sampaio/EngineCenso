@@ -6,16 +6,16 @@ using System.Text;
 
 namespace EngineCenso
 {
-    public class CensoMapping
+    public class CensoPropertyMapper
     {
-        internal string CidadesPath { get; set; }
-        internal string NomeCidadePath { get; set; }
-        internal string HabitantesCidadePath { get; set; }
-        internal string BairrosPath { get; set; }
-        internal string NomeBairroPath { get; set; }
-        internal string HabitantesBairroPath { get; set; }
+        public string CidadesPath { get; private set; }
+        public string NomeCidadePath { get; private set; }
+        public string HabitantesCidadePath { get; private set; }
+        public string BairrosPath { get; private set; }
+        public string NomeBairroPath { get; private set; }
+        public string HabitantesBairroPath { get; private set; }
 
-        public CensoMapping(string cidadesPath, string nomeCidadePath, string habitantesCidadePath, string bairrosPath, string nomeBairroPath, string habitantesBairroPath)
+        public CensoPropertyMapper(string cidadesPath, string nomeCidadePath, string habitantesCidadePath, string bairrosPath, string nomeBairroPath, string habitantesBairroPath)
         {
             this.CidadesPath = cidadesPath;
             this.NomeCidadePath = nomeCidadePath;

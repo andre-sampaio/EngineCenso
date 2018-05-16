@@ -10,9 +10,9 @@ namespace EngineCenso
 {
     public class EngineCenso
     {
-        private IEnumerable<CensoMapping> mapperCandidates;
+        private IEnumerable<CensoPropertyMapper> mapperCandidates;
 
-        public EngineCenso(IEnumerable<CensoMapping> mapperCandidates)
+        public EngineCenso(IEnumerable<CensoPropertyMapper> mapperCandidates)
         {
             this.mapperCandidates = mapperCandidates;
         }
@@ -22,8 +22,6 @@ namespace EngineCenso
             var parser = ParserFactory.BuildParserForInput(input);
             var viableMappers = mapperCandidates.Where(x => x.CanBeParsedBy(parser)).ToList();
 
-            if (viableMappers.Count() > 1)
-                throw new Exception("Ambiguous call. More than one viable candidate");
             if (viableMappers.Count() < 1)
                 throw new Exception("No viable parser");
 

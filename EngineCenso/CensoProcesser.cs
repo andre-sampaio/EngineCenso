@@ -6,9 +6,9 @@ namespace EngineCenso
     internal class CensoProcesser
     {
         IParser parser;
-        CensoMapping mapper;
+        CensoPropertyMapper mapper;
 
-        internal CensoProcesser(IParser parser, CensoMapping mapper)
+        internal CensoProcesser(IParser parser, CensoPropertyMapper mapper)
         {
             this.parser = parser;
             this.mapper = mapper;

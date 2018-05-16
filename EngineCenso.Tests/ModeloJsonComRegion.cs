@@ -1,37 +1,40 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Text;
 
 namespace EngineCenso.Tests
 {
     [TestFixture]
-    public class ModeloMGTests
+    public class ModeloJsonComRegion
     {
-        public static CensoPropertyMapper mgMapper = new CensoPropertyMapper("/body/region/cities/city", "name", "population", "neighborhoods/neighborhood", "name", "population");
+        public static CensoPropertyMapper jsonMgMapper = new CensoPropertyMapper("$.regions[*].cities[*]", "name", "population", "neighborhoods[*]", "name", "population");
 
         [TestCase]
         public void InputNoModeloMG_ComUmaRegiaoComUmaCidadeEUmBairro_RetornaStringNoPadraoDefinido()
         {
             const string input =
-@"<body>
-    <region>
-        <name>Triangulo Mineiro</name>
-        <cities>
-            <city>
-                <name>Uberlandia</name>
-                <population>700001</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Santa Monica</name>
-                        <zone>Zona Leste</zone>
-                        <population>13012</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-</body>";
+@"{
+    ""regions"":[
+        {
+            ""name"": ""Triangulo Mineiro"",
+            ""cities"": [
+                {
+                    ""name"": ""Uberlandia"",
+                    ""population"": 700001,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Santa Monica"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 13012
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}";
 
             CensoOutput expectedOutput = new CensoOutput()
             {
@@ -53,7 +56,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper,  ModeloJsonComRegion.jsonMgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -63,29 +66,31 @@ namespace EngineCenso.Tests
         public void InputNoModeloMG_ComUmaRegiaoComUmaCidadeEDoisBairros_RetornaStringNoPadraoDefinido()
         {
             const string input =
-@"<body>
-    <region>
-        <name>Triangulo Mineiro</name>
-        <cities>
-            <city>
-                <name>Uberlandia</name>
-                <population>700001</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Santa Monica</name>
-                        <zone>Zona Leste</zone>
-                        <population>13012</population>
-                    </neighborhood>
-                    <neighborhood>
-                        <name>Fundinho</name>
-                        <zone>Centro</zone>
-                        <population>19864</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-</body>";
+@"{
+    ""regions"":[
+        {
+            ""name"": ""Triangulo Mineiro"",
+            ""cities"": [
+                {
+                    ""name"": ""Uberlandia"",
+                    ""population"": 700001,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Santa Monica"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 13012
+                        },
+                        {
+                            ""name"": ""Fundinho"",
+                            ""zone"": ""Centro"",
+                            ""population"": 19864
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}";
 
             CensoOutput expectedOutput = new CensoOutput()
             {
@@ -112,7 +117,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper,  ModeloJsonComRegion.jsonMgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -122,35 +127,37 @@ namespace EngineCenso.Tests
         public void InputNoModeloMG_ComUmaRegiaoComDuasCidadesEUmBairroCada_RetornaStringNoPadraoDefinido()
         {
             const string input =
-@"<body>
-    <region>
-        <name>Triangulo Mineiro</name>
-        <cities>
-            <city>
-                <name>Uberlandia</name>
-                <population>700001</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Santa Monica</name>
-                        <zone>Zona Leste</zone>
-                        <population>13012</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-            <city>
-                <name>Uberaba</name>
-                <population>300000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Manoel Mendes</name>
-                        <zone>Zona Leste</zone>
-                        <population>16543</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-</body>";
+@"{
+    ""regions"":[
+        {
+            ""name"": ""Triangulo Mineiro"",
+            ""cities"": [
+                {
+                    ""name"": ""Uberlandia"",
+                    ""population"": 700001,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Santa Monica"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 13012
+                        }
+                    ]
+                },
+                {
+                    ""name"": ""Uberaba"",
+                    ""population"": 300000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Manoel Mendes"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 16543
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}";
 
             CensoOutput expectedOutput = new CensoOutput()
             {
@@ -185,7 +192,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper,  ModeloJsonComRegion.jsonMgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -195,45 +202,47 @@ namespace EngineCenso.Tests
         public void InputNoModeloMG_ComUmaRegiaoComDuasCidadesEDoisBairrosCada_RetornaStringNoPadraoDefinido()
         {
             const string input =
-@"<body>
-    <region>
-        <name>Triangulo Mineiro</name>
-        <cities>
-            <city>
-                <name>Uberlandia</name>
-                <population>700001</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Santa Monica</name>
-                        <zone>Zona Leste</zone>
-                        <population>13012</population>
-                    </neighborhood>
-                    <neighborhood>
-                        <name>Fundinho</name>
-                        <zone>Centro</zone>
-                        <population>19864</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-            <city>
-                <name>Uberaba</name>
-                <population>300000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Manoel Mendes</name>
-                        <zone>Zona Leste</zone>
-                        <population>16543</population>
-                    </neighborhood>
-                    <neighborhood>
-                        <name>Santa Maria</name>
-                        <zone>Centro</zone>
-                        <population>16845</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-</body>";
+@"{
+    ""regions"":[
+        {
+            ""name"": ""Triangulo Mineiro"",
+            ""cities"": [
+                {
+                    ""name"": ""Uberlandia"",
+                    ""population"": 700001,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Santa Monica"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 13012
+                        },
+                        {
+                            ""name"": ""Fundinho"",
+                            ""zone"": ""Centro"",
+                            ""population"": 19864
+                        }
+                    ]
+                },
+                {
+                    ""name"": ""Uberaba"",
+                    ""population"": 300000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Manoel Mendes"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 16543
+                        },
+                        {
+                            ""name"": ""Santa Maria"",
+                            ""zone"": ""Centro"",
+                            ""population"": 16845
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}";
 
             CensoOutput expectedOutput = new CensoOutput()
             {
@@ -278,7 +287,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper,  ModeloJsonComRegion.jsonMgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -288,40 +297,42 @@ namespace EngineCenso.Tests
         public void InputNoModeloMG_ComDuasRegioesComUmaCidadeCadaEUmBairro_RetornaStringNoPadraoDefinido()
         {
             const string input =
-@"<body>
-    <region>
-        <name>Triangulo Mineiro</name>
-        <cities>
-            <city>
-                <name>Uberlandia</name>
-                <population>700001</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Santa Monica</name>
-                        <zone>Zona Leste</zone>
-                        <population>13012</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-    <region>
-        <name>Zona da Mata Mineira</name>
-        <cities>
-            <city>
-                <name>Juiz de Fora</name>
-                <population>600000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Costa Carvalho</name>
-                        <zone>Região Central</zone>
-                        <population>80654</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-</body>";
+@"{
+    ""regions"":[
+        {
+            ""name"": ""Triangulo Mineiro"",
+            ""cities"": [
+                {
+                    ""name"": ""Uberlandia"",
+                    ""population"": 700001,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Santa Monica"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 13012
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            ""name"": ""Zona da Mata Mineira"",
+            ""cities"": [
+                {
+                    ""name"": ""Juiz de Fora"",
+                    ""population"": 600000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Costa Carvalho"",
+                            ""zone"": ""Região Central"",
+                            ""population"": 80654
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}";
 
             CensoOutput expectedOutput = new CensoOutput()
             {
@@ -356,7 +367,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper,  ModeloJsonComRegion.jsonMgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -366,50 +377,52 @@ namespace EngineCenso.Tests
         public void InputNoModeloMG_ComDuasRegioesComUmaCidadeCadaEDoisBairrosCada_RetornaStringNoPadraoDefinido()
         {
             const string input =
-@"<body>
-    <region>
-        <name>Triangulo Mineiro</name>
-        <cities>
-            <city>
-                <name>Uberlandia</name>
-                <population>700001</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Santa Monica</name>
-                        <zone>Zona Leste</zone>
-                        <population>13012</population>
-                    </neighborhood>
-                    <neighborhood>
-                        <name>Fundinho</name>
-                        <zone>Centro</zone>
-                        <population>19864</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-    <region>
-        <name>Zona da Mata Mineira</name>
-        <cities>
-            <city>
-                <name>Juiz de Fora</name>
-                <population>600000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Costa Carvalho</name>
-                        <zone>Região Central</zone>
-                        <population>80654</population>
-                    </neighborhood>
-                    <neighborhood>
-                        <name>Grajaú</name>
-                        <zone>Zona Leste</zone>
-                        <population>25006</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-</body>";
+@"{
+    ""regions"":[
+        {
+            ""name"": ""Triangulo Mineiro"",
+            ""cities"": [
+                {
+                    ""name"": ""Uberlandia"",
+                    ""population"": 700001,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Santa Monica"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 13012
+                        },
+                        {
+                            ""name"": ""Fundinho"",
+                            ""zone"": ""Centro"",
+                            ""population"": 19864
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            ""name"": ""Zona da Mata Mineira"",
+            ""cities"": [
+                {
+                    ""name"": ""Juiz de Fora"",
+                    ""population"": 600000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Costa Carvalho"",
+                            ""zone"": ""Região Central"",
+                            ""population"": 80654
+                        },
+                        {
+                            ""name"": ""Grajaú"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 25006
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}";
 
             CensoOutput expectedOutput = new CensoOutput()
             {
@@ -454,7 +467,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper,  ModeloJsonComRegion.jsonMgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -464,62 +477,64 @@ namespace EngineCenso.Tests
         public void InputNoModeloMG_ComDuasRegioesComDuasCidadesCadaEUmBairroCada_RetornaStringNoPadraoDefinido()
         {
             const string input =
-@"<body>
-    <region>
-        <name>Triangulo Mineiro</name>
-        <cities>
-            <city>
-                <name>Uberlandia</name>
-                <population>700001</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Santa Monica</name>
-                        <zone>Zona Leste</zone>
-                        <population>13012</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-            <city>
-                <name>Uberaba</name>
-                <population>300000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Manoel Mendes</name>
-                        <zone>Zona Leste</zone>
-                        <population>16543</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-    <region>
-        <name>Zona da Mata Mineira</name>
-        <cities>
-            <city>
-                <name>Juiz de Fora</name>
-                <population>600000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Costa Carvalho</name>
-                        <zone>Região Central</zone>
-                        <population>80654</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-            <city>
-                <name>Bicas</name>
-                <population>14000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Alhadas</name>
-                        <zone>Região Central</zone>
-                        <population>2300</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-</body>";
+@"{
+    ""regions"":[
+        {
+            ""name"": ""Triangulo Mineiro"",
+            ""cities"": [
+                {
+                    ""name"": ""Uberlandia"",
+                    ""population"": 700001,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Santa Monica"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 13012
+                        }
+                    ]
+                },
+                {
+                    ""name"": ""Uberaba"",
+                    ""population"": 300000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Manoel Mendes"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 16543
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            ""name"": ""Zona da Mata Mineira"",
+            ""cities"": [
+                {
+                    ""name"": ""Juiz de Fora"",
+                    ""population"": 600000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Costa Carvalho"",
+                            ""zone"": ""Região Central"",
+                            ""population"": 80654
+                        }
+                    ]
+                },
+                {
+                    ""name"": ""Bicas"",
+                    ""population"": 14000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Alhadas"",
+                            ""zone"": ""Região Central"",
+                            ""population"": 2300
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}";
 
             CensoOutput expectedOutput = new CensoOutput()
             {
@@ -580,7 +595,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper,  ModeloJsonComRegion.jsonMgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -590,82 +605,84 @@ namespace EngineCenso.Tests
         public void InputNoModeloMG_ComDuasRegioesComDuasCidadesCadaEDoisBairrosCada_RetornaStringNoPadraoDefinido()
         {
             const string input =
-@"<body>
-    <region>
-        <name>Triangulo Mineiro</name>
-        <cities>
-            <city>
-                <name>Uberlandia</name>
-                <population>700001</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Santa Monica</name>
-                        <zone>Zona Leste</zone>
-                        <population>13012</population>
-                    </neighborhood>
-                    <neighborhood>
-                        <name>Fundinho</name>
-                        <zone>Centro</zone>
-                        <population>19864</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-            <city>
-                <name>Uberaba</name>
-                <population>300000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Manoel Mendes</name>
-                        <zone>Zona Leste</zone>
-                        <population>16543</population>
-                    </neighborhood>
-                    <neighborhood>
-                        <name>Santa Maria</name>
-                        <zone>Centro</zone>
-                        <population>16845</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-    <region>
-        <name>Zona da Mata Mineira</name>
-        <cities>
-            <city>
-                <name>Juiz de Fora</name>
-                <population>600000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Costa Carvalho</name>
-                        <zone>Região Central</zone>
-                        <population>80654</population>
-                    </neighborhood>
-                    <neighborhood>
-                        <name>Grajaú</name>
-                        <zone>Zona Leste</zone>
-                        <population>25006</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-            <city>
-                <name>Bicas</name>
-                <population>14000</population>
-                <neighborhoods>
-                    <neighborhood>
-                        <name>Alhadas</name>
-                        <zone>Região Central</zone>
-                        <population>2300</population>
-                    </neighborhood>
-                    <neighborhood>
-                        <name>Edgar Moreira</name>
-                        <zone>Zona Oeste</zone>
-                        <population>3201</population>
-                    </neighborhood>
-                </neighborhoods>
-            </city>
-        </cities>
-    </region>
-</body>";
+@"{
+    ""regions"":[
+        {
+            ""name"": ""Triangulo Mineiro"",
+            ""cities"": [
+                {
+                    ""name"": ""Uberlandia"",
+                    ""population"": 700001,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Santa Monica"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 13012
+                        },
+                        {
+                            ""name"": ""Fundinho"",
+                            ""zone"": ""Centro"",
+                            ""population"": 19864
+                        }
+                    ]
+                },
+                {
+                    ""name"": ""Uberaba"",
+                    ""population"": 300000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Manoel Mendes"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 16543
+                        },
+                        {
+                            ""name"": ""Santa Maria"",
+                            ""zone"": ""Centro"",
+                            ""population"": 16845
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            ""name"": ""Zona da Mata Mineira"",
+            ""cities"": [
+                {
+                    ""name"": ""Juiz de Fora"",
+                    ""population"": 600000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Costa Carvalho"",
+                            ""zone"": ""Região Central"",
+                            ""population"": 80654
+                        },
+                        {
+                            ""name"": ""Grajaú"",
+                            ""zone"": ""Zona Leste"",
+                            ""population"": 25006
+                        }
+                    ]
+                },
+                {
+                    ""name"": ""Bicas"",
+                    ""population"": 14000,
+                    ""neighborhoods"": [
+                        {
+                            ""name"": ""Alhadas"",
+                            ""zone"": ""Região Central"",
+                            ""population"": 2300
+                        },
+                        {
+                            ""name"": ""Edgar Moreira"",
+                            ""zone"": ""Zona Oeste"",
+                            ""population"": 3201
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}";
 
             CensoOutput expectedOutput = new CensoOutput()
             {
@@ -746,7 +763,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper,  ModeloJsonComRegion.jsonMgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));

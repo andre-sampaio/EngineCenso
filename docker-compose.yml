@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  mongo:
+    image: 'mongo:3.6'
+    ports: 
+      - '27017:27017'
+    volumes:
+      - mongo:/data/db
+  enginecenso.restapi:
+    image: ${DOCKER_REGISTRY}enginecensorestapi
+    build:
+      context: .
+      dockerfile: EngineCenso.RestApi/Dockerfile
+    depends_on:
+      - 'mongo'
+    ports: 
+      - '32771:80'
+
+volumes:
+  mongo:

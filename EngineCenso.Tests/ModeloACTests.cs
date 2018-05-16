@@ -10,7 +10,7 @@ namespace EngineCenso.Tests
     [TestFixture]
     public class ModeloACTests
     {
-        public static CensoMapping acMapper = new CensoMapping("$.cities[*]", "name", "population", "neighborhoods[*]", "name", "population");
+        public static CensoPropertyMapper acMapper = new CensoPropertyMapper("$.cities[*]", "name", "population", "neighborhoods[*]", "name", "population");
 
         [TestCase]
         public void InputNoModeloAC_ComUmaCidadeEUmBairro_RetornaStringNoPadraoDefinido()
@@ -51,7 +51,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -105,7 +105,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -173,7 +173,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
@@ -259,7 +259,7 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoMapping> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
+            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
             var actualOutput = engine.Process(input);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
