@@ -9,11 +9,11 @@ namespace EngineCenso.DataAccess
 {
     public class CensoMappingMongoRepository : ICensoMappingRepository
     {
-        private readonly EngineCensoContext context = null;
+        private readonly IEngineCensoContext context = null;
 
-        public CensoMappingMongoRepository(MongoConfig config)
+        public CensoMappingMongoRepository(IEngineCensoContext context)
         {
-            context = new EngineCensoContext(config);
+            this.context = context;
         }
 
         public async Task<CensoMappingModel> Get(string name)

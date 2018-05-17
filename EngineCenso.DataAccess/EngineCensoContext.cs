@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EngineCenso.DataAccess
 {
-    public class EngineCensoContext
+    public class EngineCensoContext : IEngineCensoContext
     {
         private readonly IMongoDatabase mongoDatabase;
 
@@ -14,11 +14,19 @@ namespace EngineCenso.DataAccess
                 mongoDatabase = client.GetDatabase(config.Database);
         }
 
-        internal IMongoCollection<CensoMappingModel> CensoMappings
+        public IMongoCollection<CensoMappingModel> CensoMappings
         {
             get
             {
                 return mongoDatabase.GetCollection<CensoMappingModel>("CensoMappingModel");
+            }
+        }
+
+        public IMongoCollection<User> Users
+        {
+            get
+            {
+                return mongoDatabase.GetCollection<User>("Users");
             }
         }
     }

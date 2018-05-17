@@ -14,8 +14,6 @@ services:
       dockerfile: EngineCenso.RestApi/Dockerfile
     depends_on:
       - 'mongo'
-    ports: 
-      - '32771:80'
 
 volumes:
   mongo:

@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using EngineCenso.DataAccess;
 using EngineCenso.RestApi.Formaters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EngineCenso.RestApi
 {
@@ -25,11 +29,29 @@ namespace EngineCenso.RestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ICensoMappingRepository, CensoMappingMongoRepository>().AddSingleton(new MongoConfig()
+            services.AddSingleton(new JwtConfig() { SignKey = Configuration.GetSection("Jwt:SignKey").Value });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("Jwt:SignKey").Value))
+                    };
+                });
+
+            services.AddSingleton<IHashingAlgorithm, Pbkdf2Hashing>();
+            services.AddTransient<IEngineCensoContext, EngineCensoContext>().AddSingleton(new MongoConfig()
             {
-                ConnectionString = "mongodb://mongo:27017/CensoEngine",//Configuration.GetSection("Mongo:ConnectionString").Value;
-                Database = "CensoMappingModel" // Configuration.GetSection("Mongo:Database").Value;
-            }); 
+                ConnectionString = Configuration.GetSection("Mongo:ConnectionString").Value,
+                Database = Configuration.GetSection("Mongo:Database").Value
+            });
+            services.AddTransient<ICensoMappingRepository, CensoMappingMongoRepository>();
+            services.AddTransient<IUserProvider, MongoUserProvider>();
             services.AddMvc(setup =>
             {
                 setup.InputFormatters.Insert(0, new PlainTextFormatter());
@@ -43,7 +65,7 @@ namespace EngineCenso.RestApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

@@ -24,8 +24,8 @@ namespace EngineCenso.RestApi
 
                 Task.Run(async () =>
                 {
-                    EngineCensoContextInitializer initializer = new EngineCensoContextInitializer();
-                    await initializer.Seed(serviceProvider.GetService<MongoConfig>());
+                    EngineCensoContextInitializer initializer = new EngineCensoContextInitializer(serviceProvider.GetService<IEngineCensoContext>(), serviceProvider.GetService<IHashingAlgorithm>());
+                    await initializer.Seed(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == EnvironmentName.Development);
                 }).Wait();
             }
 

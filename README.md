@@ -12,6 +12,23 @@ Docker (Linux containers)
 
 Another alternative is to open the solution (.sln) with Visual Studio 2017, select docker-compose as the starting project and hit F5
 
+# Authenticating
+The application uses Jwt for authentication.
+To get a token:
+- POST: /api/login
+- Headers: Content-Type: application/json
+- Body:
+```json
+	{"username": "test", "password": "pass"}
+```
+Note: username test with password pass will be preconfigured in development environment
+
+The returned token will be used as a Bearer Token for subsequent requests.
+
+From now on, every example assumes the user has a valid token in every request header:
+Ex:
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNTI2NTI2NzEwfQ.p59A9Mp-VckoXHiAsNOfY1h8QrUXfTH3Y-q7SDfSJok
+
 # Adding a new transformation
 - POST: /api/CensoMapping
 - Headers: Content-Type: application/json

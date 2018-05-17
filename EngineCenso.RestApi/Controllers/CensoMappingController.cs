@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EngineCenso.DataAccess;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace EngineCenso.RestApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/CensoMapping")]
+    [Authorize]
     public class CensoMappingController : Controller
     {
         private ICensoMappingRepository censoMappingRepository;
