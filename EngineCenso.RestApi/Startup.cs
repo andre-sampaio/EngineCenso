@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EngineCenso.DataAccess;
+using EngineCenso.RestApi.Filters;
 using EngineCenso.RestApi.Formaters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -29,8 +30,18 @@ namespace EngineCenso.RestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(new JwtConfig() { SignKey = Configuration.GetSection("Jwt:SignKey").Value });
+            services.AddScoped<LoggingActionFilter>();
 
+            services.AddSingleton(new JwtConfig() { SignKey = Configuration.GetSection("Jwt:SignKey").Value });
+            services.AddSingleton<IHashingAlgorithm, Pbkdf2Hashing>();
+            services.AddTransient<IEngineCensoContext, EngineCensoContext>().AddSingleton(new MongoConfig()
+            {
+                ConnectionString = Configuration.GetSection("Mongo:ConnectionString").Value,
+                Database = Configuration.GetSection("Mongo:Database").Value
+            });
+            services.AddTransient<ICensoMappingRepository, CensoMappingMongoRepository>();
+            services.AddTransient<IUserProvider, MongoUserProvider>();
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -44,14 +55,7 @@ namespace EngineCenso.RestApi
                     };
                 });
 
-            services.AddSingleton<IHashingAlgorithm, Pbkdf2Hashing>();
-            services.AddTransient<IEngineCensoContext, EngineCensoContext>().AddSingleton(new MongoConfig()
-            {
-                ConnectionString = Configuration.GetSection("Mongo:ConnectionString").Value,
-                Database = Configuration.GetSection("Mongo:Database").Value
-            });
-            services.AddTransient<ICensoMappingRepository, CensoMappingMongoRepository>();
-            services.AddTransient<IUserProvider, MongoUserProvider>();
+            
             services.AddMvc(setup =>
             {
                 setup.InputFormatters.Insert(0, new PlainTextFormatter());

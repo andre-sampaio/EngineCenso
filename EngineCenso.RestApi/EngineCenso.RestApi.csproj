@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>5b69a68c-356e-4b4e-ace4-c58daad3bf4f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +13,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+    <PackageReference Include="NLog" Version="4.5.4" />
+    <PackageReference Include="NLog.Mongo" Version="4.5.0.57" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.5.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +25,12 @@
   <ItemGroup>
     <ProjectReference Include="..\EngineCenso.DataAccess\EngineCenso.DataAccess.csproj" />
     <ProjectReference Include="..\EngineCenso\EngineCenso.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

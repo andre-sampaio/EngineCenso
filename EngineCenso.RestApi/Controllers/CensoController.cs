@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EngineCenso.DataAccess;
+using EngineCenso.RestApi.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EngineCenso.RestApi.Controllers
 {
     [Route("api/[controller]")]
+    [ServiceFilter(typeof(LoggingActionFilter))]
     public class CensoController : Controller
     {
         private ICensoMappingRepository censoMappingRepository;
