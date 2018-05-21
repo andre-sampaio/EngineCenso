@@ -362,3 +362,6 @@ By default, the application is configured with the following mappings:
     - Deletes a mapping by its name
 - PUT: /api/CensoMapping/*name*    with CensoMapping body 
     - Updates a mapping by its name
+
+# Other funcionalities
+Application will log requests to the database
