@@ -35,6 +35,7 @@ namespace EngineCenso.DataAccess
         {
             var prev = await Get(name);
             item.InternalId = prev.InternalId;
+            item.Name = name;
 
             ReplaceOneResult actionResult = await context.CensoMappings.ReplaceOneAsync(n => n.Name.Equals(name), item, new UpdateOptions { IsUpsert = true });
             return actionResult.IsAcknowledged && actionResult.ModifiedCount > 0;
