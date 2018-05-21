@@ -7,7 +7,7 @@ namespace EngineCenso.DataAccess
 {
     public interface IEngineCensoContext
     {
-        IMongoCollection<CensoMappingModel> CensoMappings { get; }
+        IMongoCollection<CensoMapping> CensoMappings { get; }
         IMongoCollection<User> Users { get; }
     }
 }

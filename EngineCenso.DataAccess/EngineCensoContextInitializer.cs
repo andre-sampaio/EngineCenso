@@ -23,7 +23,7 @@ namespace EngineCenso.DataAccess
             if (!context.CensoMappings.Find(x => true).Any())
             {
                 await ConfigureIndexes(context.CensoMappings);
-                await context.CensoMappings.InsertManyAsync(CensoMappingModelSeedData);
+                await context.CensoMappings.InsertManyAsync(CensoMappingSeedData);
             }
 
             if(!context.Users.Find(x => true).Any())
@@ -35,24 +35,24 @@ namespace EngineCenso.DataAccess
             }
         }
 
-        private async Task ConfigureIndexes(IMongoCollection<CensoMappingModel> collection)
+        private async Task ConfigureIndexes(IMongoCollection<CensoMapping> collection)
         {
-            await collection.Indexes.CreateOneAsync(Builders<CensoMappingModel>.IndexKeys.Ascending(x => x.Name), new CreateIndexOptions() { Unique = true });
+            await collection.Indexes.CreateOneAsync(Builders<CensoMapping>.IndexKeys.Ascending(x => x.Name), new CreateIndexOptions() { Unique = true });
         }
         private async Task ConfigureIndexes(IMongoCollection<User> collection)
         {
             await collection.Indexes.CreateOneAsync(Builders<User>.IndexKeys.Ascending(x => x.UserName), new CreateIndexOptions() { Unique = true });
         }
 
-        private List<CensoMappingModel> CensoMappingModelSeedData
+        private List<CensoMapping> CensoMappingSeedData
         {
             get
             {
-                return new List<CensoMappingModel>()
+                return new List<CensoMapping>()
                 {
-                    new CensoMappingModel("AC", "$.cities[*]", "name", "population", "neighborhoods[*]", "name", "population"),
-                    new CensoMappingModel("MG", "/body/region/cities/city", "name", "population", "neighborhoods/neighborhood", "name", "population"),
-                    new CensoMappingModel("RJ", "/corpo/cidade", "nome", "populacao", "bairros/bairro", "nome", "populacao")
+                    new CensoMapping("AC", "$.cities[*]", "name", "population", "neighborhoods[*]", "name", "population"),
+                    new CensoMapping("MG", "/body/region/cities/city", "name", "population", "neighborhoods/neighborhood", "name", "population"),
+                    new CensoMapping("RJ", "/corpo/cidade", "nome", "populacao", "bairros/bairro", "nome", "populacao")
                 };
             }
         }

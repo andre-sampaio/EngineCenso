@@ -14,11 +14,11 @@ namespace EngineCenso.DataAccess
                 mongoDatabase = client.GetDatabase(config.Database);
         }
 
-        public IMongoCollection<CensoMappingModel> CensoMappings
+        public IMongoCollection<CensoMapping> CensoMappings
         {
             get
             {
-                return mongoDatabase.GetCollection<CensoMappingModel>("CensoMappingModel");
+                return mongoDatabase.GetCollection<CensoMapping>("CensoMapping");
             }
         }
 

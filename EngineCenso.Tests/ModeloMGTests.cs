@@ -53,8 +53,8 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso();
+            var actualOutput = engine.Process(input, mgMapper);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
@@ -112,8 +112,8 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso();
+            var actualOutput = engine.Process(input, mgMapper);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
@@ -185,8 +185,8 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso();
+            var actualOutput = engine.Process(input, mgMapper);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
@@ -278,8 +278,8 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso();
+            var actualOutput = engine.Process(input, mgMapper);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
@@ -356,8 +356,8 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso();
+            var actualOutput = engine.Process(input, mgMapper);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
@@ -454,8 +454,8 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso();
+            var actualOutput = engine.Process(input, mgMapper);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
@@ -580,8 +580,8 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso();
+            var actualOutput = engine.Process(input, mgMapper);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }
@@ -746,8 +746,8 @@ namespace EngineCenso.Tests
                 }
             };
 
-            EngineCenso engine = new EngineCenso(new List<CensoPropertyMapper> { ModeloACTests.acMapper, ModeloRJTests.rjMapper, ModeloMGTests.mgMapper });
-            var actualOutput = engine.Process(input);
+            EngineCenso engine = new EngineCenso();
+            var actualOutput = engine.Process(input, mgMapper);
 
             Assert.AreEqual(JsonConvert.SerializeObject(expectedOutput), JsonConvert.SerializeObject(actualOutput));
         }

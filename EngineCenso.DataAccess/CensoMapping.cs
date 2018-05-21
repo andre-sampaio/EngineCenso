@@ -6,14 +6,14 @@ using System.Text;
 
 namespace EngineCenso.DataAccess
 {
-    public class CensoMappingModel
+    public class CensoMapping
     {
-        public CensoMappingModel()
+        public CensoMapping()
         {
 
         }
 
-        public CensoMappingModel(string name, string cidadesPath, string nomeCidadePath, string habitantesCidadePath, string bairrosPath, string nomeBairroPath, string habitantesBairroPath)
+        public CensoMapping(string name, string cidadesPath, string nomeCidadePath, string habitantesCidadePath, string bairrosPath, string nomeBairroPath, string habitantesBairroPath)
         {
             this.Name = name;
             this.CidadesPath = cidadesPath;

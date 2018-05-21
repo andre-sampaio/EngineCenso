@@ -16,22 +16,22 @@ namespace EngineCenso.DataAccess
             this.context = context;
         }
 
-        public async Task<CensoMappingModel> Get(string name)
+        public async Task<CensoMapping> Get(string name)
         {
             return await context.CensoMappings.Find(x => x.Name == name).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<CensoMappingModel>> GetAll()
+        public async Task<IEnumerable<CensoMapping>> GetAll()
         {
             return await context.CensoMappings.Find(x => true).ToListAsync();
         }
 
-        public async Task Insert(CensoMappingModel item)
+        public async Task Insert(CensoMapping item)
         {
             await context.CensoMappings.InsertOneAsync(item);
         }
 
-        public async Task<bool> Update(string name, CensoMappingModel item)
+        public async Task<bool> Update(string name, CensoMapping item)
         {
             var prev = await Get(name);
             item.InternalId = prev.InternalId;

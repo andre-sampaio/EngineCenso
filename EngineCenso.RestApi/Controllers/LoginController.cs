@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EngineCenso.DataAccess;
 using EngineCenso.RestApi.Filters;
+using EngineCenso.RestApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,11 @@ namespace EngineCenso.RestApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateToken([FromBody]LoginModel login)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             IActionResult response = Unauthorized();
+
             var user = await Authenticate(login);
 
             if (user != null)
@@ -64,11 +69,5 @@ namespace EngineCenso.RestApi.Controllers
         {
             return await userProvider.Authenticate(login.UserName, login.Password);
         }
-    }
-
-    public class LoginModel
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
     }
 }

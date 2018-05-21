@@ -10,23 +10,17 @@ namespace EngineCenso
 {
     public class EngineCenso
     {
-        private IEnumerable<CensoPropertyMapper> mapperCandidates;
-
-        public EngineCenso(IEnumerable<CensoPropertyMapper> mapperCandidates)
-        {
-            this.mapperCandidates = mapperCandidates;
-        }
-
-        public CensoOutput Process(string input)
+        public IEnumerable<CensoPropertyMapper> FindViableMappers(IEnumerable<CensoPropertyMapper> mapperCandidates, string input)
         {
             var parser = ParserFactory.BuildParserForInput(input);
             var viableMappers = mapperCandidates.Where(x => x.CanBeParsedBy(parser)).ToList();
+            return viableMappers;
+        }
 
-            if (viableMappers.Count() < 1)
-                throw new Exception("No viable parser");
-
-            var processer = new CensoProcesser(parser, viableMappers.First());
-
+        public CensoOutput Process(string input, CensoPropertyMapper mapper)
+        {
+            var parser = ParserFactory.BuildParserForInput(input);
+            var processer = new CensoProcesser(parser, mapper);
             return processer.Process();
         }
     }
